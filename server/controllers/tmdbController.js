@@ -107,6 +107,26 @@ const getMovieLogos = async (req, res) => {
   }
 };
 
+const getTvLogos = async (req, res) => {
+  const fetch = (await import("node-fetch")).default;
+  const url = `${TMDB_API_URL}/tv/${req.params.id}/images?language=en`;
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: TMDB_API_KEY,
+    },
+  };
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching data from TMDb:", error);
+    res.status(500).json({ message: "Error fetching data from TMDb" });
+  }
+};
+
 const getMovieVideos = async (req, res) => {
   const fetch = (await import("node-fetch")).default;
   const url = `${TMDB_API_URL}/movie/${req.params.id}/videos?language=en-US`;
@@ -135,4 +155,5 @@ module.exports = {
   getMovieLogos,
   getMovieVideos,
   getInTheaters,
+  getTvLogos,
 };

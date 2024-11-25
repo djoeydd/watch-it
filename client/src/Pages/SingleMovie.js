@@ -46,6 +46,11 @@ const SingleMovie = () => {
         ...prevData,
         videoKey,
       }));
+      const logo = await fetchMovieLogos(movieData.id);
+      setMovieData((prevData) => ({
+        ...prevData,
+        logo,
+      }));
     } catch (error) {
       console.error("Error fetching movie videos:", error);
     }
@@ -62,11 +67,17 @@ const SingleMovie = () => {
   return (
     <>
       <div className="flex flex-col pt-3 w-screen h-screen bg-gray-900">
-        <img
-          src={movieData.logo ? `${img_500}/${movieData.logo}` : unavailable}
-          alt={movieData.title}
-          className="mx-auto pb-3 max-h-24 px-4"
-        />
+        {movieData.logo ? (
+          <img
+            src={`${img_500}/${movieData.logo}`}
+            alt={movieData.title}
+            className="mx-auto pb-3 max-h-24 px-4"
+          />
+        ) : (
+          <p className="text-center text-white text-2xl pb-3 px-4">
+            {movieData.title}
+          </p>
+        )}
         <div className="movie-details-container flex flex-col md:flex-row">
           <img
             src={

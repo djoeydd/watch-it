@@ -15,7 +15,11 @@ const Body = () => {
   const fetchMovies = useCallback(async () => {
     try {
       const data = await fetchTrendingMovies();
-      setMovies(data.results);
+      const moviesWithMediaType = data.results.map((movie) => ({
+        ...movie,
+        media_type: "movie",
+      }));
+      setMovies(moviesWithMediaType);
     } catch (error) {
       console.error("Error fetching trending movies:", error);
     }
@@ -34,7 +38,11 @@ const Body = () => {
   const fetchNowPlaying = useCallback(async () => {
     try {
       const data = await fetchInTheaters();
-      setNowPlaying(data.results);
+      const moviesWithMediaType = data.results.map((movie) => ({
+        ...movie,
+        media_type: "movie",
+      }));
+      setNowPlaying(moviesWithMediaType);
     } catch (error) {
       console.error("Error fetching in-theater movies:", error);
     }

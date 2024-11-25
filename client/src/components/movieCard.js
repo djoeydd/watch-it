@@ -21,7 +21,9 @@ const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/singleMovie/${id}`, { state: { movie } });
+    const path =
+      media_type === "movie" ? `/singleMovie/${id}` : `/singleTv/${id}`;
+    navigate(path, { state: { movie } });
   };
 
   return (

@@ -68,6 +68,22 @@ export const fetchMovieLogos = async (id) => {
   }
 };
 
+export const fetchTvLogos = async (id) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/tv/${id}/logos`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    const logo =
+      data.logos && data.logos.length > 0 ? data.logos[0].file_path : null;
+    return logo;
+  } catch (error) {
+    console.error("Error fetching movie logos:", error);
+    throw error;
+  }
+};
+
 export const fetchMovieVideos = async (id) => {
   try {
     const response = await fetch(`${API_BASE_URL}/movie/${id}/videos`);

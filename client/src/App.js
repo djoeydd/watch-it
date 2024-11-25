@@ -20,6 +20,7 @@ function App() {
           <Route path="/tv" element={<TV />} />
           <Route path="/singleMovie/:id" element={<SingleMovie />} />
           <Route path="/singleTv/:id" element={<SingleTv />} />
+          <Route path="/singleTv/:id" element={<SingleTv />} />
           <Route path="/account" element={<Account />} />
           <Route path="*" element={<Error />} />
         </Routes>
