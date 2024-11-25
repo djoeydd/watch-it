@@ -1,10 +1,11 @@
 import React from "react";
+import Error from "../components/Error";
 
 const Tv = () => {
   return (
-    <div>
-      <h1>TV shows</h1>
-    </div>
+    <>
+      <Error />
+    </>
   );
 };
 

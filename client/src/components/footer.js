@@ -1,8 +1,7 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faPerson } from "@fortawesome/free-solid-svg-icons";
-import "./footer.css";
 
 const Footer = () => {
   const data = [
@@ -26,32 +25,29 @@ const Footer = () => {
       text: "TV shows",
       link: "/tv",
     },
-    {
-      icon: faFilm,
-      text: "Search",
-      link: "/search",
-    },
   ];
+  //get current route
+  const location = useLocation();
+
   return (
     <>
-      <div className="navbar-container">
-        <div className="">
-          <div className="w-full text-center bg-gray-800 footer">
-            {data.map((Val) => {
-              return (
-                <>
-                  <NavLink to={Val.link} className="btn btn-dark h-100">
-                    <button className="">
-                      <FontAwesomeIcon icon={Val.icon} id="fire" />
-                      <br />
-                      <h5 className="pt-1 fs-6">{Val.text}</h5>
-                    </button>
-                  </NavLink>
-                </>
-              );
-            })}
-            ;
-          </div>
+      <div className="sticky bottom-0 w-full z-50 h-20 bg-gray-800 ">
+        <div className="flex flex-row justify-evenly w-full h-full">
+          {data.map((Val, index) => (
+            <NavLink key={index} to={Val.link} className="text-center">
+              <button
+                className={`${
+                  location.pathname === Val.link ? "bg-purple-800  " : ""
+                } h-full w-20`}
+              >
+                <FontAwesomeIcon
+                  icon={Val.icon}
+                  className="fa-inverse fa-1x text-slate-50"
+                />
+                <h5 className="pt-0 text-slate-50">{Val.text}</h5>
+              </button>
+            </NavLink>
+          ))}
         </div>
       </div>
     </>

@@ -1,10 +1,12 @@
 import React from "react";
+import Body from "../components/body";
+import Error from "../components/Error";
 
 const Movies = () => {
   return (
-    <div>
-      <h1>Movies</h1>
-    </div>
+    <>
+      <Error />
+    </>
   );
 };
 
