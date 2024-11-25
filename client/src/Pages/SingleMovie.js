@@ -37,7 +37,7 @@ const SingleMovie = () => {
   };
 
   return (
-    <div className="flex flex-col main-container pt-3 w-screen min-h-[calc(100vh-77.5px)] bg-black">
+    <div className="flex flex-col main-container pt-3 w-screen min-h-[calc(100vh-77.5px)] bg-gray-900">
       <img
         src={movieData.logo ? `${img_500}/${movieData.logo}` : unavailable}
         alt={movieData.title}
