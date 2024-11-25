@@ -1,8 +1,10 @@
 import React from "react";
+import Header from "./header";
 
 const SignUp = () => {
   return (
     <div>
+      <Header />
       <div className="relative flex min-h-screen flex-col pt-10 overflow-hidden bg-gray-900 py-6 sm:py-12">
         <div className=" w-9/12 mx-auto gap-3">
           <h1 className="text-xl tracking-wide text-white ">

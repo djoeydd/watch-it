@@ -75,8 +75,8 @@ function VideoPlayer({ videoid, onPlayerVisibleChange }) {
           onClick={handleLogoClick}
           className="play-button border-none bg-transparent text-slate-50 text-center p-2 rounded-full"
         >
-          <p className="text-slate-50 text-center">Trailer</p>
           <FontAwesomeIcon icon={faYoutube} className="fa-inverse fa-3x" />
+          <p className="text-slate-50 text-center">Trailer</p>
         </button>
 
         {/* Full-Screen YouTube Player */}

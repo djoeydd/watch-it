@@ -34,7 +34,7 @@ const Footer = () => {
 
   return (
     <>
-      <div className="sticky bottom-0 w-full z-50 h-16 bg-gray-900 pb-2">
+      <div className="fixed bottom-0 w-full z-50 h-14 bg-gray-900 ">
         <div className="flex flex-row justify-evenly w-full h-full">
           {data.map((Val, index) => (
             <NavLink key={index} to={Val.link} className="text-center">

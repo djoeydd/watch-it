@@ -4,7 +4,7 @@ import {
   fetchTrendingTV,
   fetchInTheaters,
 } from "../services/tmdbService";
-
+import Header from "./header";
 import MovieCard from "./movieCard";
 
 const Body = () => {
@@ -48,7 +48,9 @@ const Body = () => {
 
   return (
     <>
-      <div className="bg-gray-900 px-4 min-h-screen">
+      <Header />
+
+      <div className="bg-gray-900 px-3 min-h-screen">
         <div className="">
           <h1 className=" text-gray-300 text-2xl tracking-widest pt-2">
             Popular Movies
