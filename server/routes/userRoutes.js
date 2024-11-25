@@ -1,7 +1,8 @@
 const express = require("express");
 const {
-  createUser,
-  getAllUsers,
+  registerUser,
+  verifyUser,
+  loginUser,
   getUserByEmail,
   addMovieToUser,
   updateMovieStatus,
@@ -11,8 +12,9 @@ const {
 const router = express.Router();
 
 // Routes
-router.post("/", createUser); // Create a user
-router.get("/", getAllUsers); // Get all users
+router.post("/register", registerUser);
+router.get("/verify", verifyUser);
+router.post("/login", loginUser);
 router.get("/:email", getUserByEmail); // Get user by email
 router.post("/:email/movies", addMovieToUser); // Add a movie to user
 router.patch("/:email/movies/:movieId", updateMovieStatus); // Update movie status

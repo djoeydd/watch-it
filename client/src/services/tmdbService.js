@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://watch-it-20w0.onrender.com/api/tmdb";
+const API_BASE_URL = "http://localhost:5001/api/tmdb";
 
 export const fetchTrendingMovies = async () => {
   try {

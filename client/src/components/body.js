@@ -60,14 +60,14 @@ const Body = () => {
 
       <div className="bg-gray-900 px-3 min-h-screen pb-14">
         <div className="">
-          <h1 className=" text-gray-300 text-2xl tracking-widest pt-2">
+          <h1 className=" text-gray-300 text-xl tracking-widest pt-2">
             Popular Movies
           </h1>
           <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
             {movies.map((item) => (
               <div
                 key={item.id}
-                className="flex-none w-[8rem] md:w-[9rem] lg:w-[11rem] xl:w-[12rem]"
+                className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
               >
                 <MovieCard movie={item} />
               </div>
@@ -75,7 +75,7 @@ const Body = () => {
           </div>
         </div>
         <div>
-          <h1 className=" text-gray-300 text-2xl tracking-widest pt-2">
+          <h1 className=" text-gray-300 text-xl tracking-widest pt-2">
             Popular TV Shows
           </h1>
         </div>
@@ -84,7 +84,7 @@ const Body = () => {
             {tvShows.map((item) => (
               <div
                 key={item.id}
-                className="flex-none w-[8rem] md:w-[9rem] lg:w-[11rem] xl:w-[12rem]"
+                className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
               >
                 <MovieCard movie={item} />
               </div>
@@ -92,7 +92,7 @@ const Body = () => {
           </div>
         </div>
         <div>
-          <h1 className=" text-gray-300 text-2xl tracking-widest pt-2">
+          <h1 className=" text-gray-300 text-xl tracking-widest pt-2">
             In Theaters
           </h1>
         </div>
@@ -101,7 +101,7 @@ const Body = () => {
             {nowPlaying.map((item) => (
               <div
                 key={item.id}
-                className="flex-none w-[8rem] md:w-[9rem] lg:w-[11rem] xl:w-[12rem]"
+                className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
               >
                 <MovieCard movie={item} />
               </div>
