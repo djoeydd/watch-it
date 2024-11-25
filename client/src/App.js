@@ -14,6 +14,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} exact />
           <Route path="/movies" element={<Movies />} />

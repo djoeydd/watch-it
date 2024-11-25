@@ -36,6 +36,22 @@ export const fetchTrendingTV = async () => {
   }
 };
 
+export const fetchInTheaters = async () => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/movie/now_playing?language=en-US&page=1`
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching in-theater movies:", error);
+    throw error;
+  }
+};
+
 export const fetchMovieLogos = async (id) => {
   try {
     const response = await fetch(`${API_BASE_URL}/movie/${id}/logos`);

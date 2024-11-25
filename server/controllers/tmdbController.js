@@ -25,6 +25,26 @@ const getTrendingMovies = async (req, res) => {
   }
 };
 
+const getInTheaters = async (req, res) => {
+  const fetch = (await import("node-fetch")).default;
+  const url = `${TMDB_API_URL}/movie/now_playing?language=en-US&page=1`;
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: TMDB_API_KEY,
+    },
+  };
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching data from TMDb:", error);
+    res.status(500).json({ message: "Error fetching data from TMDb" });
+  }
+};
+
 const getTrendingTV = async (req, res) => {
   const fetch = (await import("node-fetch")).default;
   const url = `${TMDB_API_URL}/trending/tv/week?language=en-US&page=1`;
@@ -114,4 +134,5 @@ module.exports = {
   getMovieDetails,
   getMovieLogos,
   getMovieVideos,
+  getInTheaters,
 };

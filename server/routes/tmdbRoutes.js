@@ -5,6 +5,7 @@ const {
   getMovieDetails,
   getMovieLogos,
   getMovieVideos,
+  getInTheaters,
 } = require("../controllers/tmdbController");
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.get("/trending/tv", getTrendingTV); // Fetch trending TV shows
 router.get("/movie/:id", getMovieDetails); // Fetch movie details by ID
 router.get("/movie/:id/logos", getMovieLogos); // Fetch movie images by ID
 router.get("/movie/:id/videos", getMovieVideos); // Fetch movie videos by ID
+router.get("/in-theaters", getInTheaters); // Fetch in-theater movies
 
 module.exports = router;
