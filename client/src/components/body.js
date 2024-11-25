@@ -50,7 +50,7 @@ const Body = () => {
     <>
       <Header />
 
-      <div className="bg-gray-900 px-3 min-h-screen pb-4">
+      <div className="bg-gray-900 px-3 min-h-screen pb-8">
         <div className="">
           <h1 className=" text-gray-300 text-2xl tracking-widest pt-2">
             Popular Movies
