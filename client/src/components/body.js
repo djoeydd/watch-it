@@ -6,11 +6,16 @@ import {
 } from "../services/tmdbService";
 import Header from "./header";
 import MovieCard from "./movieCard";
+import DropdownMenu from "./dropdown";
 
 const Body = () => {
   const [movies, setMovies] = useState([]); // State for movies
   const [tvShows, setTvShows] = useState([]); // State for TV shows
   const [nowPlaying, setNowPlaying] = useState([]); // State for in-theater movies
+  const menuItems = [
+    { href: "#", text: "Today" },
+    { href: "#", text: "Weekly" },
+  ];
 
   const fetchMovies = useCallback(async () => {
     try {
@@ -46,67 +51,65 @@ const Body = () => {
     } catch (error) {
       console.error("Error fetching in-theater movies:", error);
     }
-  });
+  }, []);
 
   useEffect(() => {
     fetchMovies(); // Calling the fetchTrendingMovies function only during the initial rendering of the app.
     fetchTVShows(); // Calling the fetchTrendingTV function only during the initial rendering of the app.
     fetchNowPlaying();
-  }, []); // Added fetchTrendingMovies and fetchTrendingTV to the dependency array
+  }, [fetchMovies, fetchTVShows, fetchNowPlaying]); // Added fetchTrendingMovies and fetchTrendingTV to the dependency array
 
   return (
     <>
       <Header />
 
       <div className="bg-gray-900 px-3 min-h-screen pb-14">
-        <div className="">
-          <h1 className=" text-gray-300 text-xl tracking-widest pt-2">
+        <div className="relative flex justify-between items-center">
+          <h1 className="text-gray-300 text-xl tracking-widest pt-2">
             Popular Movies
           </h1>
-          <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
-            {movies.map((item) => (
-              <div
-                key={item.id}
-                className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
-              >
-                <MovieCard movie={item} />
-              </div>
-            ))}
-          </div>
+          <DropdownMenu buttonText="Weekly" menuItems={menuItems} />
         </div>
-        <div>
-          <h1 className=" text-gray-300 text-xl tracking-widest pt-2">
+        <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
+          {movies.map((item) => (
+            <div
+              key={item.id}
+              className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
+            >
+              <MovieCard movie={item} />
+            </div>
+          ))}
+        </div>
+        <div className="relative flex justify-between items-center">
+          <h1 className="text-gray-300 text-xl tracking-widest pt-2">
             Popular TV Shows
           </h1>
+          <DropdownMenu buttonText="Weekly" menuItems={menuItems} />
         </div>
-        <div className="">
-          <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
-            {tvShows.map((item) => (
-              <div
-                key={item.id}
-                className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
-              >
-                <MovieCard movie={item} />
-              </div>
-            ))}
-          </div>
+        <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
+          {tvShows.map((item) => (
+            <div
+              key={item.id}
+              className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
+            >
+              <MovieCard movie={item} />
+            </div>
+          ))}
         </div>
         <div>
-          <h1 className=" text-gray-300 text-xl tracking-widest pt-2">
+          <h1 className="text-gray-300 text-xl tracking-widest pt-2">
             In Theaters
           </h1>
         </div>
-        <div className="">
-          <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
-            {nowPlaying.map((item) => (
-              <div
-                key={item.id}
-                className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
-              >
-                <MovieCard movie={item} />
-              </div>
-            ))}
-          </div>
+        <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
+          {nowPlaying.map((item) => (
+            <div
+              key={item.id}
+              className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
+            >
+              <MovieCard movie={item} />
+            </div>
+          ))}
         </div>
       </div>
     </>
