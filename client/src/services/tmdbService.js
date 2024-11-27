@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://watch-it-20w0.onrender.com/api/tmdb";
+const API_BASE_URL = "http://localhost:5001/api/tmdb";
 
 export const fetchTrendingMovies = async () => {
   try {
@@ -21,6 +21,50 @@ export const fetchTrendingMovies = async () => {
     throw error;
   }
 };
+
+/**
+ * Fetch movies from the backend with dynamic query parameters
+ * @param {Object} params - An object containing the search parameters
+ * @returns {Promise<Object>} - The JSON response from the TMDB API
+ */
+export async function discoverMovies(params = {}) {
+  // Create the query string from the params object
+  const queryParams = new URLSearchParams(
+    Object.entries(params).filter(
+      ([_, value]) => value !== undefined && value !== null
+    ) // Filter out undefined/null
+  );
+  const url = `https://api.themoviedb.org/3/discover/movie?${queryParams.toString()}`;
+  console.log("query params: ", queryParams);
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYmY1MWZjZDYzYTJmZWExODNmYzBlN2QxY2U5Y2IyYyIsIm5iZiI6MTczMjM1NzYyNC4zMTUxNjQ2LCJzdWIiOiI2NzM4OWRlNjljMTZkYWZhMDZmOWExMmEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.VFDv4IRyRh05K02Cn8wDqbBg9Tu_FhriqibX43rXkXw",
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch movies: ${response.statusText}`);
+    }
+    const data = await response.json();
+
+    const moviesWithLogos = await Promise.all(
+      data.results.map(async (movie) => {
+        const logo = await fetchMovieLogos(movie.id);
+        return { ...movie, logo, media_type: "movie" };
+      })
+    );
+
+    return { ...data, results: moviesWithLogos };
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    throw error;
+  }
+}
 
 export const fetchTrendingTV = async () => {
   try {

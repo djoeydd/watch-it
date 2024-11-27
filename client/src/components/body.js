@@ -3,34 +3,46 @@ import {
   fetchTrendingMovies,
   fetchTrendingTV,
   fetchInTheaters,
+  fetchMovieVideos,
 } from "../services/tmdbService";
 import Header from "./header";
-import MovieCard from "./movieCard";
+import Search from "./searchBar";
 import DropdownMenu from "./dropdown";
+import MediaList from "./mediaList";
+import TrailerList from "./TrailerList";
 
 const Body = () => {
   const [movies, setMovies] = useState([]); // State for movies
   const [tvShows, setTvShows] = useState([]); // State for TV shows
   const [nowPlaying, setNowPlaying] = useState([]); // State for in-theater movies
+  const [randomTrailers, setRandomTrailers] = useState([]); // State for random trailers
+
   const menuItems = [
     { href: "#", text: "Today" },
     { href: "#", text: "Weekly" },
   ];
 
+  // Fetch movies and random trailers
   const fetchMovies = useCallback(async () => {
     try {
       const data = await fetchTrendingMovies();
-      const moviesWithMediaType = data.results.map((movie) => ({
-        ...movie,
-        media_type: "movie",
-      }));
-      setMovies(moviesWithMediaType);
+      const moviesWithVideos = await Promise.all(
+        data.results.map(async (movie) => {
+          const videoKey = await fetchMovieVideos(movie.id);
+          return { ...movie, videoKey };
+        })
+      );
+      setMovies(moviesWithVideos);
+
+      // Pick 5 random trailers
+      const randomSelection = getRandomTrailers(moviesWithVideos);
+      setRandomTrailers(randomSelection);
     } catch (error) {
-      console.error("Error fetching trending movies:", error);
+      console.error("Error fetching movies:", error);
     }
   }, []);
 
-  // Fetch trending TV shows from the API
+  // Fetch TV shows
   const fetchTVShows = useCallback(async () => {
     try {
       const data = await fetchTrendingTV();
@@ -40,6 +52,7 @@ const Body = () => {
     }
   }, []);
 
+  // Fetch in-theater movies
   const fetchNowPlaying = useCallback(async () => {
     try {
       const data = await fetchInTheaters();
@@ -53,64 +66,51 @@ const Body = () => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchMovies(); // Calling the fetchTrendingMovies function only during the initial rendering of the app.
-    fetchTVShows(); // Calling the fetchTrendingTV function only during the initial rendering of the app.
-    fetchNowPlaying();
-  }, [fetchMovies, fetchTVShows, fetchNowPlaying]); // Added fetchTrendingMovies and fetchTrendingTV to the dependency array
+  // Helper function to get 5 random trailers
+  const getRandomTrailers = (movies) => {
+    return [...movies].sort(() => 0.5 - Math.random()).slice(0, 5);
+  };
 
+  // Fetch data on initial render
+  useEffect(() => {
+    fetchMovies();
+    fetchTVShows();
+    fetchNowPlaying();
+  }, [fetchMovies, fetchTVShows, fetchNowPlaying]);
   return (
     <>
-      <Header />
-
-      <div className="bg-gray-900 px-3 min-h-screen pb-14">
-        <div className="relative flex justify-between items-center">
-          <h1 className="text-gray-300 text-xl tracking-widest pt-2">
+      <div className="flex flex-col bg-gray-900 px-1 min-h-screen pb-14">
+        <div className="flex justify-between px-3">
+          <Header />
+          <Search />
+        </div>
+        <div className="flex justify-between items-center">
+          <h1 className="text-gray-300 text-xl tracking-widest pt-2 pl-2">
             Popular Movies
           </h1>
           <DropdownMenu buttonText="Weekly" menuItems={menuItems} />
         </div>
-        <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
-          {movies.map((item) => (
-            <div
-              key={item.id}
-              className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
-            >
-              <MovieCard movie={item} />
-            </div>
-          ))}
+        <MediaList mediaList={movies} />
+        <h1 className="text-gray-300 text-xl tracking-widest pt-2 pl-2">
+          Trailers{" "}
+        </h1>
+        <div className="px-3">
+          <TrailerList movies={randomTrailers} />
         </div>
-        <div className="relative flex justify-between items-center">
-          <h1 className="text-gray-300 text-xl tracking-widest pt-2">
+        <div className="flex justify-between items-center">
+          <h1 className="text-gray-300 text-xl tracking-widest pt-2 pl-2">
             Popular TV Shows
           </h1>
           <DropdownMenu buttonText="Weekly" menuItems={menuItems} />
         </div>
-        <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
-          {tvShows.map((item) => (
-            <div
-              key={item.id}
-              className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
-            >
-              <MovieCard movie={item} />
-            </div>
-          ))}
-        </div>
+        <MediaList mediaList={tvShows} />
         <div>
-          <h1 className="text-gray-300 text-xl tracking-widest pt-2">
+          <h1 className="text-gray-300 text-xl tracking-widest pt-2 pl-2">
             In Theaters
           </h1>
         </div>
-        <div className="flex space-x-4 px-0 overflow-x-auto py-2 md:py-2 xl:py-5 pe-4">
-          {nowPlaying.map((item) => (
-            <div
-              key={item.id}
-              className="flex-none w-[7rem] md:w-[7rem] lg:w-[8rem] xl:w-[10rem]"
-            >
-              <MovieCard movie={item} />
-            </div>
-          ))}
-        </div>
+
+        <MediaList mediaList={nowPlaying} />
       </div>
     </>
   );

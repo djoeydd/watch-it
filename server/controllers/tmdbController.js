@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const { query } = require("express");
 
 dotenv.config();
 
@@ -107,6 +108,36 @@ const getMovieLogos = async (req, res) => {
   }
 };
 
+const discoverMovies = async (req, res) => {
+  const filteredParams = Object.fromEntries(
+    Object.entries(queryParams).filter(
+      ([_, value]) => value !== undefined && value !== null
+    )
+  );
+  console.log("qp---", queryParams);
+  const queryString = new URLSearchParams(filteredParams).toString();
+  console.log(queryString);
+  const tmdbURL = `${TMDB_API_URL}/discover/${queryString}`;
+
+  const fetch = (await import("node-fetch")).default;
+  const url = `${tmdbURL}`;
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: TMDB_API_KEY,
+    },
+  };
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching data from TMDb:", error);
+    res.status(500).json({ message: "Error fetching data from TMDb" });
+  }
+};
+
 const getTvLogos = async (req, res) => {
   const fetch = (await import("node-fetch")).default;
   const url = `${TMDB_API_URL}/tv/${req.params.id}/images?language=en`;
@@ -156,4 +187,5 @@ module.exports = {
   getMovieVideos,
   getInTheaters,
   getTvLogos,
+  discoverMovies,
 };

@@ -3,33 +3,12 @@ import { useLocation } from "react-router-dom";
 import { fetchMovieLogos, fetchMovieVideos } from "../services/tmdbService";
 import VideoPlayer from "../components/videoPlayer";
 import Footer from "../components/footer";
+import genreMapping from "../utils/genreMapping";
 
 const img_500 = "https://image.tmdb.org/t/p/w500"; // Base URL for images
 const img_1280 = "https://image.tmdb.org/t/p/w1280"; // Base URL for higher resolution images
 
 const unavailable = "https://www.movienewz.com/img/films/poster-holder.jpg"; // Path to a placeholder image
-
-const genreMapping = {
-  28: "Action",
-  12: "Adventure",
-  16: "Animation",
-  35: "Comedy",
-  80: "Crime",
-  99: "Documentary",
-  18: "Drama",
-  10751: "Family",
-  14: "Fantasy",
-  36: "History",
-  27: "Horror",
-  10402: "Music",
-  9648: "Mystery",
-  10749: "Romance",
-  878: "Science Fiction",
-  10770: "TV Movie",
-  53: "Thriller",
-  10752: "War",
-  37: "Western",
-};
 
 const SingleMovie = () => {
   const location = useLocation();
@@ -89,7 +68,7 @@ const SingleMovie = () => {
             className="backdrop-image mx-auto w-full"
           />
           <div className="flex flex-col px-3 pt-1">
-            <div className="flex flex-wrap mt-2">
+            <div className="flex flex-wrap mt-2 gap-2">
               {movieData.genre_ids &&
                 movieData.genre_ids.map((genre_id) => (
                   <span

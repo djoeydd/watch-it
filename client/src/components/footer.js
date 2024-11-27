@@ -44,7 +44,7 @@ const Footer = () => {
                 } h-full w-20`}
               >
                 <Val.icon
-                  className={`h-8 w-8 mx-auto ${
+                  className={`h-5 w-5 mx-auto ${
                     location.pathname === Val.link
                       ? "text-purple-800"
                       : "text-gray-300"

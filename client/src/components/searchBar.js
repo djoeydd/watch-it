@@ -1,13 +1,32 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 const Search = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://jsonplaceholder.typicode.com/todos?_limit=10`
+        );
+        setSearchResults(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError("Error fetching data. Please try again.");
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <>
-      <div className="relative bg-black px-6 pb-8 pt-10">
+      <div className="relative bg-transparent pt-7 w-3/5">
         <input
           type="search"
-          placeholder="Enter a movie name"
-          className="w-full h-10 px-5 rounded-2xl text-white bg-gray-800 ring-1 ring-white focus:outline-none top-5 z-50 max-w-72"
+          placeholder="Search..."
+          className="w-full h-9 px-3 rounded-2xl text-white bg-gray-800 focus:outline-purple-800 z-50 max-w-200 align-middle"
         />
       </div>
     </>
