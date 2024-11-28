@@ -16,6 +16,7 @@ const Body = () => {
   const [tvShows, setTvShows] = useState([]); // State for TV shows
   const [nowPlaying, setNowPlaying] = useState([]); // State for in-theater movies
   const [randomTrailers, setRandomTrailers] = useState([]); // State for random trailers
+  const [snappedIndex, setSnappedIndex] = useState(0); // State for snapped index
 
   const menuItems = [
     { href: "#", text: "Today" },
@@ -68,7 +69,11 @@ const Body = () => {
 
   // Helper function to get 5 random trailers
   const getRandomTrailers = (movies) => {
-    return [...movies].sort(() => 0.5 - Math.random()).slice(0, 5);
+    // Filter out movies without a videoKey
+    const moviesWithTrailers = movies.filter((movie) => movie.videoKey);
+
+    // Randomly select 5 movies with trailers
+    return moviesWithTrailers.sort(() => 0.5 - Math.random()).slice(0, 5);
   };
 
   // Fetch data on initial render
@@ -90,11 +95,10 @@ const Body = () => {
           </h1>
           <DropdownMenu buttonText="Weekly" menuItems={menuItems} />
         </div>
+
         <MediaList mediaList={movies} />
-        <h1 className="text-gray-300 text-xl tracking-widest pt-2 pl-2">
-          Trailers{" "}
-        </h1>
-        <div className="px-3">
+
+        <div className="px-2">
           <TrailerList movies={randomTrailers} />
         </div>
         <div className="flex justify-between items-center">

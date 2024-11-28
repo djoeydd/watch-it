@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const LogIn = ({ setAuthToken, setIsUserLoggedIn }) => {
+const LogIn = ({ setAuthToken, setIsUserLoggedIn, setEmail }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,14 +24,16 @@ const LogIn = ({ setAuthToken, setIsUserLoggedIn }) => {
           password: formData.password,
         }),
       });
+      console.log("response: ", response);
 
       const data = await response.json();
-
+      console.log("data: ", data);
       if (response.ok) {
         const { token } = data;
         localStorage.setItem("authToken", token); // Store token in localStorage
         setAuthToken(token);
         setIsUserLoggedIn(true);
+        setEmail(formData.email);
       } else {
         throw new Error(data.message || "Login failed");
       }

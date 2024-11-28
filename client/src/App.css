@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+.scrollbar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+
+.scrollbar-dot {
+  background-color: gray;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin: 5px 0;
+  transition: height 0.3s;
+}

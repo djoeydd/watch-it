@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const argon2 = require("argon2");
 
 // Schema for movies
 const movieSchema = new mongoose.Schema({
@@ -33,14 +33,6 @@ const userSchema = new mongoose.Schema({
   lastLogin: { type: Date, default: Date.now }, // Last login timestamp
   movies: [movieSchema], // Array of movies the user interacts with
   tvShows: [tvShowSchema], // Array of TV shows the user interacts with
-});
-
-// Hash the password before saving the user
-userSchema.pre("save", async function (next) {
-  const user = this;
-  if (!user.isModified("password")) return next();
-  user.password = await bcrypt.hash(user.password, 10);
-  next();
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   registerUser,
-  verifyUser,
+
   loginUser,
   getUserByEmail,
   addMovieToUser,
@@ -13,7 +13,6 @@ const router = express.Router();
 
 // Routes
 router.post("/register", registerUser);
-router.get("/verify", verifyUser);
 router.post("/login", loginUser);
 router.get("/:email", getUserByEmail); // Get user by email
 router.post("/:email/movies", addMovieToUser); // Add a movie to user

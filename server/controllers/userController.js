@@ -1,34 +1,28 @@
 const crypto = require("crypto");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 
 // Create a new user
 exports.registerUser = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
-  console.log(req.body);
   try {
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log("User already exists");
-
       return res
         .status(400)
         .json({ message: "Account with that email already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    // Create a new user
     const user = new User({
       firstName,
       lastName,
       email,
-      password: hashedPassword,
+      password, // Store password in plain text (not recommended)
     });
-    console.log(user);
+
     await user.save();
-    console.log("User saved:", user);
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
@@ -41,21 +35,21 @@ exports.registerUser = async (req, res) => {
   }
 };
 
+// Login user
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
+    console.log("User:", user);
     if (!user) return res.status(404).json({ error: "User not found." });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(401).json({ error: "Invalid credentials." });
+    console.log("Plain text password:", password);
+    console.log("Stored password:", user.password);
 
-    if (!user.verified) {
-      return res
-        .status(403)
-        .json({ error: "Please verify your email before logging in." });
+    if (password !== user.password) {
+      console.log("Invalid credentials");
+      return res.status(401).json({ error: "Invalid credentials." });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
@@ -63,30 +57,8 @@ exports.loginUser = async (req, res) => {
     });
     res.json({ token });
   } catch (error) {
+    console.error("Login failed:", error);
     res.status(500).json({ error: "Login failed." });
-  }
-};
-
-exports.verifyUser = async (req, res) => {
-  const { token } = req.query;
-
-  try {
-    const user = await User.findOne({
-      verificatonToken: token,
-      verificationTokenExpress: { $gt: Date.now() },
-    });
-
-    if (!user)
-      return res.status(400).json({ message: "Invalid or expired token" });
-
-    user.verified = true;
-    user.verificationToken = null;
-    user.verificationTokenExpires = null;
-    await user.save();
-
-    res.json({ message: "Email verified successfully." });
-  } catch (error) {
-    res.status(500).json({ error: "Verification failed." });
   }
 };
 
@@ -108,8 +80,16 @@ exports.getUserByEmail = async (req, res) => {
 // Add a movie to a user's list
 exports.addMovieToUser = async (req, res) => {
   const { email } = req.params;
-  const { movieId, title, image, watched, favorite, rating, inWatchlist } =
-    req.body;
+  const {
+    movieId,
+    title,
+    image,
+    watched,
+    favorite,
+    rating,
+    inWatchlist,
+    media_type,
+  } = req.body;
 
   try {
     const updatedUser = await User.findOneAndUpdate(
@@ -124,6 +104,7 @@ exports.addMovieToUser = async (req, res) => {
             favorite,
             rating,
             inWatchlist,
+            media_type,
           },
         },
       },

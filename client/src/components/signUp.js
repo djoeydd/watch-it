@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SignUp = ({ setAuthToken, setIsUserLoggedIn }) => {
+const SignUp = ({ setAuthToken, setIsUserLoggedIn, setEmail }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -45,6 +45,7 @@ const SignUp = ({ setAuthToken, setIsUserLoggedIn }) => {
         localStorage.setItem("authToken", token); // Store token in localStorage
         setAuthToken(token);
         setIsUserLoggedIn(true);
+        setEmail(formData.email);
       } else {
         throw new Error(data.message || "Sign up failed");
       }
